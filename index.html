@@ -350,6 +350,76 @@
             position: relative;
         }
 
+        /* MURAL DE MENSAGENS */
+        .mural-section {
+            margin-top: 80px;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .mural-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .mensagens-lista {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mensagem-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 
+                0 8px 20px rgba(0, 0, 0, 0.06),
+                0 2px 6px rgba(0, 0, 0, 0.04);
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            animation: slideInRight 0.5s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .mensagem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 
+                0 12px 30px rgba(0, 0, 0, 0.1),
+                0 4px 10px rgba(0, 0, 0, 0.06);
+        }
+
+        .mensagem-texto {
+            font-size: 1.05rem;
+            color: #2d3748;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .mensagem-data {
+            font-size: 0.85rem;
+            color: #718096;
+            text-align: right;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+            font-size: 1.1rem;
+        }
+
         @media (max-width: 768px) {
             .main-message {
                 font-size: 2.2rem;
@@ -382,6 +452,14 @@
 
             .response-text {
                 font-size: 1rem;
+            }
+
+            .mural-title {
+                font-size: 1.5rem;
+            }
+
+            .mensagem-card {
+                padding: 20px;
             }
         }
 
@@ -420,11 +498,73 @@
 
         <div id="responseMessage" class="response-message">
             <div class="response-title">Sua mensagem foi enviada, você conseguiu!</div>
-            <div class="response-text">Aguarde a mensagem do seu amigo.</div>
+            <div class="response-text">Sua mensagem aparecerá no mural abaixo.</div>
+        </div>
+
+        <!-- MURAL DE MENSAGENS -->
+        <div class="mural-section">
+            <h2 class="mural-title">📝 Mural de Mensagens</h2>
+            <div id="mensagensLista" class="mensagens-lista">
+                <div class="loading">Carregando mensagens...</div>
+            </div>
         </div>
     </div>
 
- <script>
+    <script>
+// Buscar mensagens ao carregar a página
+window.addEventListener('load', buscarMensagens);
+
+async function buscarMensagens() {
+    try {
+        const response = await fetch('https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/mensagens', {
+            method: 'GET'
+        });
+
+        const data = await response.json();
+
+        if (data.sucesso && data.mensagens) {
+            exibirMensagens(data.mensagens);
+        } else {
+            document.getElementById('mensagensLista').innerHTML = '<div class="loading">Nenhuma mensagem ainda. Seja o primeiro!</div>';
+        }
+    } catch (error) {
+        console.error('Erro ao buscar mensagens:', error);
+        document.getElementById('mensagensLista').innerHTML = '<div class="loading">Erro ao carregar mensagens.</div>';
+    }
+}
+
+function exibirMensagens(mensagens) {
+    const lista = document.getElementById('mensagensLista');
+    
+    if (mensagens.length === 0) {
+        lista.innerHTML = '<div class="loading">Nenhuma mensagem ainda. Seja o primeiro!</div>';
+        return;
+    }
+
+    lista.innerHTML = '';
+    
+    mensagens.forEach(msg => {
+        const card = document.createElement('div');
+        card.className = 'mensagem-card';
+        
+        const data = new Date(msg.data);
+        const dataFormatada = data.toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        card.innerHTML = `
+            <div class="mensagem-texto">${msg.texto}</div>
+            <div class="mensagem-data">${dataFormatada}</div>
+        `;
+        
+        lista.appendChild(card);
+    });
+}
+
 async function sendMessage() {
     const textarea = document.getElementById('userMessage');
     const message = textarea.value.trim();
@@ -435,7 +575,6 @@ async function sendMessage() {
     }
 
     try {
-        // Envia para a API AWS Lambda com DynamoDB
         const response = await fetch('https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/mensagem', {
             method: 'POST',
             headers: {
@@ -454,10 +593,13 @@ async function sendMessage() {
             // Limpa o textarea
             textarea.value = '';
 
-            // Scroll suave até a resposta
+            // Atualiza o mural
+            await buscarMensagens();
+
+            // Scroll suave até o mural
             setTimeout(() => {
-                responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 100);
+                document.querySelector('.mural-section').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 500);
         } else {
             alert('Erro ao enviar mensagem. Tente novamente.');
         }
@@ -474,6 +616,6 @@ document.getElementById('userMessage').addEventListener('keypress', function(e) 
         sendMessage();
     }
 });
-</script>
+    </script>
 </body>
 </html>
