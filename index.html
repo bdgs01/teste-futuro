@@ -431,13 +431,9 @@ async function sendMessage() {
 
     if (message) {
         try {
-            // Envia para a API AWS Lambda
-            const response = await fetch('https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/cadastro', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ mensagem: message })
+            // Envia para a API AWS Lambda usando GET com query string
+            const response = await fetch(`https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/cadastro?mensagem=${encodeURIComponent(message)}`, {
+                method: 'GET'
             });
 
             const data = await response.json();
