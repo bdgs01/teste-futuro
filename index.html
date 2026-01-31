@@ -429,34 +429,51 @@ async function sendMessage() {
     const textarea = document.getElementById('userMessage');
     const message = textarea.value.trim();
 
-    if (message) {
-        try {
-            // Envia para a API AWS Lambda usando GET com query string
-            const response = await fetch(`https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/cadastro?mensagem=${encodeURIComponent(message)}`, {
-                method: 'GET'
-            });
+    if (!message) {
+        alert('Por favor, digite uma mensagem!');
+        return;
+    }
 
-            const data = await response.json();
+    try {
+        // Envia para a API AWS Lambda com DynamoDB
+        const response = await fetch('https://e2wz3mal.execute-api.us-east-1.amazonaws.com/mensagem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ texto: message })
+        });
 
-            if (data.sucesso) {
-                // Mostra a resposta
-                const responseDiv = document.getElementById('responseMessage');
-                responseDiv.classList.add('show');
+        const data = await response.json();
 
-                // Limpa o textarea
-                textarea.value = '';
+        if (data.sucesso) {
+            // Mostra a resposta
+            const responseDiv = document.getElementById('responseMessage');
+            responseDiv.classList.add('show');
 
-                // Scroll suave até a resposta
-                setTimeout(() => {
-                    responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 100);
-            }
-        } catch (error) {
-            console.error('Erro ao enviar:', error);
+            // Limpa o textarea
+            textarea.value = '';
+
+            // Scroll suave até a resposta
+            setTimeout(() => {
+                responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        } else {
             alert('Erro ao enviar mensagem. Tente novamente.');
         }
+    } catch (error) {
+        console.error('Erro ao enviar:', error);
+        alert('Erro ao enviar mensagem. Tente novamente.');
     }
 }
+
+// Permite Enter para enviar (Shift+Enter para nova linha)
+document.getElementById('userMessage').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
     </script>
 </body>
 </html>
