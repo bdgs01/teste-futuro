@@ -3,460 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mensagem de Esperança</title>
+    <title>Mural Público</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Inter', sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, 
-                #ffffff 0%, 
-                #fafbfc 15%, 
-                #f5f7fa 30%, 
-                #ffffff 45%,
-                #f8f9fb 60%,
-                #ffffff 75%,
-                #f6f8fa 90%,
-                #ffffff 100%);
-            background-size: 400% 400%;
-            animation: metallicFlow 20s ease infinite;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
         }
-
-        body::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
-            animation: lightShift 25s ease-in-out infinite;
-            pointer-events: none;
-        }
-
-        @keyframes metallicFlow {
-            0%, 100% { background-position: 0% 50%; }
-            25% { background-position: 50% 25%; }
-            50% { background-position: 100% 50%; }
-            75% { background-position: 50% 75%; }
-        }
-
-        @keyframes lightShift {
-            0%, 100% { transform: translate(0, 0); }
-            50% { transform: translate(30px, 30px); }
-        }
-
-        .container {
-            max-width: 750px;
-            width: 100%;
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 {
+            color: white;
             text-align: center;
-            position: relative;
-            z-index: 1;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
         }
-
-        .main-message {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d3748 50%, #1a1a1a 100%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: textShine 8s ease-in-out infinite, fadeInDown 1s ease-out;
-            margin-bottom: 70px;
-            letter-spacing: -1.5px;
-            line-height: 1.15;
-            text-shadow: none;
-            position: relative;
-        }
-
-        .main-message::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
-            border-radius: 2px;
-            animation: fadeInScale 1s ease-out 0.5s both;
-        }
-
-        @keyframes textShine {
-            0%, 100% { background-position: 0% center; }
-            50% { background-position: 200% center; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: translateX(-50%) scaleX(0);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%) scaleX(1);
-            }
-        }
-
-        .input-section {
-            animation: fadeInUp 1s ease-out 0.4s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .input-label {
-            font-size: 1.1rem;
-            color: #4a5568;
-            margin-bottom: 16px;
-            font-weight: 600;
-            text-align: left;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-
-        .input-wrapper {
-            position: relative;
-            background: #ffffff;
+        .input-box {
+            background: white;
+            padding: 30px;
             border-radius: 20px;
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.08),
-                0 4px 8px rgba(0, 0, 0, 0.05),
-                inset 0 2px 4px rgba(255, 255, 255, 0.95),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.02);
-            border: 1.5px solid rgba(0, 0, 0, 0.06);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
         }
-
-        .input-wrapper::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.6), 
-                transparent);
-            transition: left 0.6s;
-        }
-
-        .input-wrapper:hover::before {
-            left: 100%;
-        }
-
-        .input-wrapper:hover {
-            box-shadow: 
-                0 15px 40px rgba(0, 0, 0, 0.1),
-                0 6px 12px rgba(0, 0, 0, 0.06),
-                inset 0 2px 4px rgba(255, 255, 255, 0.95),
-                inset 0 -2px 4px rgba(0, 0, 0, 0.02);
-            border-color: rgba(102, 126, 234, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .input-wrapper:focus-within {
-            box-shadow: 
-                0 20px 50px rgba(102, 126, 234, 0.2),
-                0 8px 16px rgba(102, 126, 234, 0.15),
-                inset 0 2px 4px rgba(255, 255, 255, 0.95),
-                inset 0 -2px 4px rgba(102, 126, 234, 0.05);
-            border-color: rgba(102, 126, 234, 0.5);
-            transform: translateY(-4px);
-        }
-
         textarea {
             width: 100%;
-            min-height: 140px;
-            padding: 24px 26px;
-            border: none;
-            border-radius: 20px;
-            font-size: 1.05rem;
-            font-family: 'Inter', sans-serif;
-            color: #2d3748;
-            background: transparent;
+            min-height: 100px;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
             resize: vertical;
-            outline: none;
-            line-height: 1.7;
-            font-weight: 400;
         }
-
-        textarea::placeholder {
-            color: #a0aec0;
-            font-weight: 400;
-        }
-
-        .button-wrapper {
-            margin-top: 24px;
-            text-align: right;
-        }
-
         button {
-            position: relative;
-            padding: 16px 40px;
-            font-size: 1.05rem;
-            font-weight: 700;
-            color: #ffffff;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #667eea 100%);
-            background-size: 200% auto;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
             border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 8px 20px rgba(102, 126, 234, 0.35),
-                0 4px 8px rgba(118, 75, 162, 0.2),
-                inset 0 1px 2px rgba(255, 255, 255, 0.3);
-            letter-spacing: 0.5px;
-            overflow: hidden;
-        }
-
-        button::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        button:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 
-                0 12px 30px rgba(102, 126, 234, 0.45),
-                0 6px 12px rgba(118, 75, 162, 0.3),
-                inset 0 1px 2px rgba(255, 255, 255, 0.3);
-            background-position: right center;
-        }
-
-        button:active {
-            transform: translateY(-1px);
-            box-shadow: 
-                0 6px 15px rgba(102, 126, 234, 0.4),
-                0 3px 6px rgba(118, 75, 162, 0.25);
-        }
-
-        button span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .response-message {
-            display: none;
-            margin-top: 50px;
-            padding: 36px;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
-            border-radius: 20px;
-            border-left: 5px solid #3b82f6;
-            box-shadow: 
-                0 15px 40px rgba(59, 130, 246, 0.15),
-                0 6px 12px rgba(59, 130, 246, 0.1),
-                inset 0 2px 4px rgba(255, 255, 255, 0.8);
-            animation: slideInBounce 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .response-message::before {
-            content: '✓';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            font-size: 120px;
-            color: rgba(59, 130, 246, 0.08);
+            border-radius: 10px;
+            font-size: 1.1rem;
             font-weight: bold;
-            line-height: 1;
+            cursor: pointer;
+            margin-top: 15px;
         }
-
-        @keyframes slideInBounce {
-            0% {
-                opacity: 0;
-                transform: translateY(50px) scale(0.9);
-            }
-            60% {
-                opacity: 1;
-                transform: translateY(-10px) scale(1.02);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        button:hover { opacity: 0.9; }
+        .mensagens {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         }
-
-        .response-message.show {
-            display: block;
+        .mensagem {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
         }
-
-        .response-title {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: #1e40af;
-            margin-bottom: 14px;
-            letter-spacing: -0.5px;
-            position: relative;
-        }
-
-        .response-text {
-            font-size: 1.15rem;
-            color: #1e3a8a;
-            line-height: 1.7;
-            font-weight: 500;
-            position: relative;
-        }
-
-        @media (max-width: 768px) {
-            .main-message {
-                font-size: 2.2rem;
-                margin-bottom: 50px;
-                letter-spacing: -1px;
-            }
-
-            textarea {
-                min-height: 120px;
-                font-size: 1rem;
-                padding: 20px;
-            }
-
-            button {
-                width: 100%;
-                padding: 18px;
-            }
-
-            .button-wrapper {
-                text-align: center;
-            }
-
-            .response-message {
-                padding: 28px;
-            }
-
-            .response-title {
-                font-size: 1.3rem;
-            }
-
-            .response-text {
-                font-size: 1rem;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
+        .mensagem-texto { font-size: 1.1rem; color: #333; margin-bottom: 10px; }
+        .mensagem-data { font-size: 0.85rem; color: #666; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="main-message">Nós vamos conseguir. Nós podemos!</h1>
-
-        <div class="input-section">
-            <div class="input-label">Vamos testar o futuro.</div>
-
-            <div class="input-wrapper">
-                <textarea 
-                    id="userMessage" 
-                    placeholder="Digite aqui porquê você acredita..."
-                    rows="4"
-                ></textarea>
-            </div>
-
-            <div class="button-wrapper">
-                <button onclick="sendMessage()">
-                    <span>Enviar</span>
-                </button>
-            </div>
+        <h1>🌟 Mural Público 🌟</h1>
+        
+        <div class="input-box">
+            <textarea id="mensagem" placeholder="Digite sua mensagem..."></textarea>
+            <button onclick="enviar()">Enviar Mensagem</button>
         </div>
 
-        <div id="responseMessage" class="response-message">
-            <div class="response-title">Sua mensagem foi enviada, você conseguiu!</div>
-            <div class="response-text">Aguarde a mensagem do seu amigo.</div>
+        <div class="mensagens" id="mensagens">
+            <p style="text-align:center; color:#999;">Carregando mensagens...</p>
         </div>
     </div>
 
     <script>
-async function sendMessage() {
-    const textarea = document.getElementById('userMessage');
-    const message = textarea.value.trim();
+const API = 'https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com';
 
-    if (message) {
-        try {
-            // Envia para a API AWS Lambda usando GET com query string
-            const response = await fetch(`https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/cadastro?mensagem=${encodeURIComponent(message)}`, {
-                method: 'GET'
-            });
+async function enviar() {
+    const texto = document.getElementById('mensagem').value.trim();
+    if (!texto) return alert('Digite uma mensagem!');
 
-            const data = await response.json();
-
-            if (data.sucesso) {
-                // Mostra a resposta
-                const responseDiv = document.getElementById('responseMessage');
-                responseDiv.classList.add('show');
-
-                // Limpa o textarea
-                textarea.value = '';
-
-                // Scroll suave até a resposta
-                setTimeout(() => {
-                    responseDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                }, 100);
-            }
-        } catch (error) {
-            console.error('Erro ao enviar:', error);
-            alert('Erro ao enviar mensagem. Tente novamente.');
-        }
+    try {
+        await fetch(`${API}/mensagem`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ texto })
+        });
+        document.getElementById('mensagem').value = '';
+        carregar();
+    } catch (e) {
+        alert('Erro ao enviar!');
     }
 }
+
+async function carregar() {
+    try {
+        const res = await fetch(`${API}/mensagens`);
+        const msgs = await res.json();
+        
+        const html = msgs.map(m => `
+            <div class="mensagem">
+                <div class="mensagem-texto">${m.texto}</div>
+                <div class="mensagem-data">${new Date(m.data).toLocaleString('pt-BR')}</div>
+            </div>
+        `).join('');
+        
+        document.getElementById('mensagens').innerHTML = html || '<p style="text-align:center; color:#999;">Nenhuma mensagem ainda.</p>';
+    } catch (e) {
+        document.getElementById('mensagens').innerHTML = '<p style="text-align:center; color:#f00;">Erro ao carregar mensagens.</p>';
+    }
+}
+
+carregar();
+setInterval(carregar, 5000);
     </script>
 </body>
 </html>
+
