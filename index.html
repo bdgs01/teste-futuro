@@ -55,9 +55,9 @@
             border: 1px solid #e2e8f0;
         }
 
+        input[type="text"],
         textarea {
             width: 100%;
-            min-height: 100px;
             padding: 16px;
             border: none;
             border-radius: 12px;
@@ -65,11 +65,16 @@
             font-family: 'Inter', sans-serif;
             color: #2d3748;
             background: transparent;
-            resize: vertical;
             outline: none;
             line-height: 1.5;
         }
 
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        input[type="text"]::placeholder,
         textarea::placeholder {
             color: #a0aec0;
         }
@@ -168,6 +173,13 @@
             border-left: 3px solid #667eea;
         }
 
+        .mensagem-nome {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+
         .mensagem-texto {
             font-size: 0.95rem;
             color: #2d3748;
@@ -230,6 +242,16 @@
         <div class="input-section">
             <div class="input-label">Vamos testar o futuro.</div>
 
+            <!-- CAMPO DE NOME -->
+            <div class="input-wrapper" style="margin-bottom: 12px;">
+                <input 
+                    type="text"
+                    id="userName" 
+                    placeholder="Seu nome (opcional)"
+                >
+            </div>
+
+            <!-- CAMPO DE MENSAGEM -->
             <div class="input-wrapper">
                 <textarea 
                     id="userMessage" 
@@ -277,18 +299,18 @@ async function buscarMensagens() {
 
 function exibirMensagens(mensagens) {
     const lista = document.getElementById('mensagensLista');
-    
+
     if (mensagens.length === 0) {
         lista.innerHTML = '<div class="loading">Nenhuma mensagem ainda. Seja o primeiro!</div>';
         return;
     }
 
     lista.innerHTML = '';
-    
+
     mensagens.forEach(msg => {
         const card = document.createElement('div');
         card.className = 'mensagem-card';
-        
+
         const data = new Date(msg.data);
         const dataFormatada = data.toLocaleString('pt-BR', {
             day: '2-digit',
@@ -297,18 +319,23 @@ function exibirMensagens(mensagens) {
             hour: '2-digit',
             minute: '2-digit'
         });
-        
+
+        const nome = msg.nome || 'Anônimo';
+
         card.innerHTML = `
+            <div class="mensagem-nome">${nome}</div>
             <div class="mensagem-texto">${msg.texto}</div>
             <div class="mensagem-data">${dataFormatada}</div>
         `;
-        
+
         lista.appendChild(card);
     });
 }
 
 async function sendMessage() {
+    const nameInput = document.getElementById('userName');
     const textarea = document.getElementById('userMessage');
+    const name = nameInput.value.trim() || 'Anônimo';
     const message = textarea.value.trim();
 
     if (!message) {
@@ -320,16 +347,20 @@ async function sendMessage() {
         const response = await fetch('https://a2l1w39msl.execute-api.sa-east-1.amazonaws.com/mensagem', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ texto: message })
+            body: JSON.stringify({ 
+                nome: name,
+                texto: message 
+            })
         });
 
         const data = await response.json();
 
         if (data.sucesso) {
             document.getElementById('responseMessage').classList.add('show');
+            nameInput.value = '';
             textarea.value = '';
             await buscarMensagens();
-            
+
             setTimeout(() => {
                 document.querySelector('.mural-section').scrollIntoView({ behavior: 'smooth' });
             }, 300);
